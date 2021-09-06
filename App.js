@@ -6,7 +6,7 @@ import ScreenSelector from './src/ScreenSelector'
 import FoodDb from './src/FoodDb'
 import NewItem from './src/NewItem'
 import Stats from './src/Stats'
-
+import DataHandler from './src/DataHandler'
 
 export default class App extends Component {
   constructor(props) {
@@ -17,6 +17,7 @@ export default class App extends Component {
       quickSrcolling: false,
       quickSrcollingTarget: null
     }
+    this.dataHandler = new DataHandler()
   }
 
   handleScreenSwitch = (screenID, screenIndex) => {
@@ -62,7 +63,7 @@ export default class App extends Component {
           pagingEnabled={true}
           showsHorizontalScrollIndicator={false}>
             <FoodDb />
-            <NewItem />
+            <NewItem dataHandler={this.dataHandler} />
             <Stats />
       </ScrollView>
         <ScreenSelector
