@@ -53,27 +53,28 @@ export default class App extends Component {
   }
 
   render() {
-    return (
-      <React.Fragment>
-        <ScrollView
-          ref={scrollView => this.scrollView = scrollView}
-          onScroll={this.handleOnScroll}
-          horizontal={true}
-          style={Styles.ScrollView}
-          pagingEnabled={true}
-          showsHorizontalScrollIndicator={false}>
-            <FoodDb />
-            <NewItem dataHandler={this.dataHandler} />
-            <Stats />
-      </ScrollView>
-        <ScreenSelector
-          screenList={Screens}
-          currentScreen={this.state.currentScreenIndex}
-          screenSwitch={this.handleScreenSwitch}
-        />
-        <StatusBar style="auto" />
-      </React.Fragment>
-  )}
+    return <React.Fragment>
+      <View style={Styles.StatusBarHack}></View>
+      {/* Padding so that the top status bar doesn't screw with things */}
+      <ScrollView
+        ref={scrollView => this.scrollView = scrollView}
+        onScroll={this.handleOnScroll}
+        horizontal={true}
+        style={Styles.ScrollView}
+        pagingEnabled={true}
+        showsHorizontalScrollIndicator={false}>
+          <FoodDb />
+          <NewItem dataHandler={this.dataHandler} />
+          <Stats />
+    </ScrollView>
+      <ScreenSelector
+        screenList={Screens}
+        currentScreen={this.state.currentScreenIndex}
+        screenSwitch={this.handleScreenSwitch}
+      />
+      <StatusBar style="auto" />
+    </React.Fragment>
+  }
 }
 
 const Screens = [

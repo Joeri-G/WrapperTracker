@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from 'react-native'
+import { StyleSheet, Dimensions, StatusBar } from 'react-native'
 import fallback_icon from '../assets/icons/fallback_icon.png'
 
 // constants
@@ -14,6 +14,7 @@ const CLR_ACCENT = CLR_5
 
 const WIDTH = Dimensions.get('window').width
 const HEIGHT = Dimensions.get('window').height
+const STAUSBAR_HEIGHT = typeof StatusBar.currentHeight == "number" ? StatusBar.currentHeight : 0
 
 export const Constants = {
   CLR_1: CLR_1,
@@ -25,7 +26,8 @@ export const Constants = {
   CLR_TXT: CLR_TXT,
   CLR_ACCENT: CLR_ACCENT,
   WIDTH: WIDTH,
-  HEIGHT: HEIGHT
+  HEIGHT: HEIGHT,
+  STAUSBAR_HEIGHT: STAUSBAR_HEIGHT
 }
 
 // styles
@@ -33,8 +35,6 @@ export const App_Base = StyleSheet.create({
   mainAppScreen: {
     flex: 1,
     backgroundColor: CLR_BG,
-    alignItems: 'center',
-    justifyContent: 'center',
     width: WIDTH
   },
 
@@ -42,6 +42,11 @@ export const App_Base = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     backgroundColor: CLR_3,
+  },
+
+  StatusBarHack: {
+    height: STAUSBAR_HEIGHT,
+    backgroundColor: CLR_1
   }
 })
 
@@ -79,6 +84,31 @@ export const ScreenSelector = StyleSheet.create({
   Selector_icon: {
     height: 24,
     width: 24
+  },
+
+  SubSelector: {
+    backgroundColor: CLR_4,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+  },
+
+  SubSelector_button: {
+    flex: 1,
+    borderBottomColor: CLR_4,
+    borderBottomWidth: 4,
+    borderStyle: "solid",
+    padding: 12
+  },
+
+  SubSelector_text: {
+    fontSize: 16,
+    textAlign: "center"
+  },
+
+  Active_Subselector: {
+    borderBottomColor: CLR_ACCENT
   }
 })
 

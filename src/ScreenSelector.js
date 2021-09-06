@@ -2,15 +2,13 @@ import React, { Component } from 'react'
 import { StyleSheet, Text, View, Image, Pressable } from 'react-native'
 import { ScreenSelector as Styles } from './Styles';
 
-
 export default class ScreenSelector extends Component {
   render() {
     return <View style={Styles.Selector}>
       {
         this.props.screenList.map((item, i) => {
           let buttonStyle = i == this.props.currentScreen ? [Styles.Selector_button, Styles.Active_Screen] : Styles.Selector_button
-          return (
-            <Pressable
+          return <Pressable
               style={buttonStyle}
               key={i}
               onPress={() => this.props.screenSwitch(item.id, i)}
@@ -18,8 +16,27 @@ export default class ScreenSelector extends Component {
                 <Image source={item.icon} style={Styles.Selector_icon} />
                 <Text style={Styles.Selector_text}> {item.title} </Text>
             </Pressable>
-        )})
+        })
       }
     </View>
+  }
+}
+
+export class SubScreenSelector extends Component {
+  render() {
+    return <View style={Styles.SubSelector}>
+      {
+        this.props.screenList.map((item, i) => {
+          let buttonStyle = i == this.props.currentScreen ? [Styles.SubSelector_button, Styles.Active_Subselector] : Styles.SubSelector_button
+          return <Pressable
+              style={buttonStyle}
+              key={i}
+              onPress={() => this.props.screenSwitch(item.id, i)}
+              buttonID={item.id} >
+                <Text style={Styles.SubSelector_text}> {item.title} </Text>
+            </Pressable>
+        })
+      }
+    </View>;
   }
 }
