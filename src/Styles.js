@@ -15,6 +15,7 @@ const CLR_ACCENT = CLR_5
 const WIDTH = Dimensions.get('window').width
 const HEIGHT = Dimensions.get('window').height
 const STAUSBAR_HEIGHT = typeof StatusBar.currentHeight == "number" ? StatusBar.currentHeight : 0
+const PANE_MARGIN = 8
 
 export const Constants = {
   CLR_1: CLR_1,
@@ -27,7 +28,8 @@ export const Constants = {
   CLR_ACCENT: CLR_ACCENT,
   WIDTH: WIDTH,
   HEIGHT: HEIGHT,
-  STAUSBAR_HEIGHT: STAUSBAR_HEIGHT
+  STAUSBAR_HEIGHT: STAUSBAR_HEIGHT,
+  PANE_MARGIN: PANE_MARGIN
 }
 
 // styles
@@ -35,80 +37,30 @@ export const App_Base = StyleSheet.create({
   mainAppScreen: {
     flex: 1,
     backgroundColor: CLR_BG,
-    width: WIDTH
+    width: WIDTH - PANE_MARGIN * 2,
+    margin: PANE_MARGIN
+  },
+
+  StatusBarHack: {
+    height: STAUSBAR_HEIGHT,
+    backgroundColor: CLR_5
   },
 
   ScrollView: {
     flex: 1,
     flexDirection: 'row',
-    backgroundColor: CLR_3,
-  },
-
-  StatusBarHack: {
-    height: STAUSBAR_HEIGHT,
-    backgroundColor: CLR_1
+    backgroundColor: CLR_BG
   }
 })
 
 export const ScreenSelector = StyleSheet.create({
-  Selector: {
-    backgroundColor: CLR_1,
-    display: "flex",
-    flexDirection: "row",
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
-    padding: 6,
-    paddingBottom: 4
-  },
-
-  Active_Screen: {
-    backgroundColor: CLR_2,
-    borderRadius: 24
-  },
-
-  Selector_button: {
-    display: "flex",
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 100,
-    height: 56
-  },
-
-  Selector_text: {
-    color: CLR_ACCENT,
-    fontSize: 12,
-    fontWeight: "bold",
-    textAlign: "center"
-  },
-
-  Selector_icon: {
-    height: 24,
-    width: 24
-  },
-
   SubSelector: {
     backgroundColor: CLR_4,
     display: "flex",
     flexDirection: "row",
     alignItems: 'center',
     justifyContent: 'space-evenly',
-  },
-
-  SubSelector_button: {
-    flex: 1,
-    borderBottomColor: CLR_4,
-    borderBottomWidth: 4,
-    borderStyle: "solid",
-    padding: 12
-  },
-
-  SubSelector_text: {
-    fontSize: 16,
-    textAlign: "center"
-  },
-
-  Active_Subselector: {
-    borderBottomColor: CLR_ACCENT
+    padding: 4
   }
 })
 
@@ -119,4 +71,17 @@ export const Icons = {
   new_food: fallback_icon,
   stats: fallback_icon,
   new_item: fallback_icon
+}
+
+export const globalAppTheme = {
+  iconSet: 'MaterialIcons',
+  fontFamily: 'Roboto',
+  palette: {
+    // main theme colors
+    primaryColor: CLR_1,
+    secondaryColor: CLR_2,
+    accentColor: CLR_ACCENT,
+    // text color palette
+    primaryTextColor: CLR_TXT
+  }
 }

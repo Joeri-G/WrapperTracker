@@ -11,7 +11,7 @@ export default class StartScreen extends Component {
   render() {
     return <View style={Styles.mainAppScreen}>
         <Text>New Item</Text>
-        <Button onPress={(e) => { this.props.dataHandler.doSomething() }} title="db test 1" color={Constants.CLR_ACCENT} />
+        <Button onPress={(e) => { this.props.DataHandler.doSomething() }} title="db test 1" color={Constants.CLR_ACCENT} />
       </View>
   }
 }

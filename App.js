@@ -1,8 +1,8 @@
 import { StatusBar } from 'expo-status-bar'
 import React, { Component } from 'react'
 import { Text, View, ScrollView } from 'react-native'
-import { App_Base as Styles, Icons, Constants } from './src/Styles'
-import ScreenSelector from './src/ScreenSelector'
+import { App_Base as Styles, Icons, Constants, globalAppTheme } from './src/Styles'
+import { ThemeContext, getTheme, BottomNavigation } from 'react-native-material-ui';
 import FoodDb from './src/FoodDb'
 import NewItem from './src/NewItem'
 import Stats from './src/Stats'
@@ -20,17 +20,15 @@ export default class App extends Component {
     this.dataHandler = new DataHandler()
   }
 
-  handleScreenSwitch = (screenID, screenIndex) => {
+  quickSwitch = (screenID, screenIndex) => {
     if (screenIndex !== this.state.currentScreenIndex) {
       this.setState({
         currentScreenID:  screenID,
-        currentScreenIndex: screenIndex
-      })
-      this.scrollView.scrollTo({x: Constants.WIDTH * screenIndex, y: 0, animated: true})
-      this.setState({
+        currentScreenIndex: screenIndex,
         quickSrcolling: true, // quickscrolling is activated so that the buttons wont flash as the screen swipes past them
         quickSrcollingTarget: screenIndex
       })
+      this.scrollView.scrollTo({x: Constants.WIDTH * screenIndex, y: 0, animated: true})
     }
   }
 
@@ -53,7 +51,7 @@ export default class App extends Component {
   }
 
   render() {
-    return <React.Fragment>
+    return <ThemeContext.Provider value={getTheme(globalAppTheme)}>
       <View style={Styles.StatusBarHack}></View>
       {/* Padding so that the top status bar doesn't screw with things */}
       <ScrollView
@@ -63,34 +61,42 @@ export default class App extends Component {
         style={Styles.ScrollView}
         pagingEnabled={true}
         showsHorizontalScrollIndicator={false}>
-          <FoodDb />
-          <NewItem dataHandler={this.dataHandler} />
-          <Stats />
-    </ScrollView>
-      <ScreenSelector
-        screenList={Screens}
-        currentScreen={this.state.currentScreenIndex}
-        screenSwitch={this.handleScreenSwitch}
-      />
+          <FoodDb DataHandler={this.dataHandler} />
+          <NewItem DataHandler={this.dataHandler} />
+          <Stats DataHandler={this.dataHandler} />
+      </ScrollView>
+      <BottomNavigation>
+        {Screens.map((item, i) => <BottomNavigation.Action
+          key={i}
+          icon={item.icon}
+          label={item.title}
+          onPress={() => this.quickSwitch(item.id, i)}
+          style={this.state.currentScreenIndex == i ? {
+            // inline styles that highlight the currently active button
+            icon: { color: Constants.CLR_ACCENT },
+            label: { color: Constants.CLR_ACCENT }
+          } : undefined}
+        />)}
+      </BottomNavigation>
       <StatusBar style="auto" />
-    </React.Fragment>
+    </ThemeContext.Provider>
   }
 }
 
 const Screens = [
   {
     title: "Saved",
-    icon: Icons.food_db,
+    icon: "list",
     id: "food_db"
   },
   {
     title: "New",
-    icon: Icons.new_meal,
+    icon: "add-circle-outline",
     id: "new_item"
   },
   {
     title: "Stats",
-    icon: Icons.stats,
+    icon: "insights",
     id: "stats"
   }
 ]
