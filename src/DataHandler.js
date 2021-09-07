@@ -12,7 +12,7 @@ const settings = {
   }
 }
 
-export default class DataHandler {
+class DataBase {
   constructor() {
     this.db = SQLite.openDatabase(
       settings.db.name,
@@ -96,5 +96,81 @@ export default class DataHandler {
   doSomething() {
     console.log("Doing Something...")
     this.databaseDump()
+  }
+}
+
+export default class DataHandler extends DataBase {
+  constructor() {
+    super()
+  }
+
+  retrieveAllNutritionalInformation(success = this.openCB, error = this.errorCB, range = null) {
+    this.db.transaction((trans) => {
+      // dynamicall build SQL with a range selection depending on
+      // if the range argument is passed
+      const SQL = `SELECT
+        name,
+        UUID,
+        timestamp,
+        kcal,
+        fat,
+        carbohydrates,
+        sugars,
+        proteins,
+        fibre,
+        salt,
+        note
+      FROM
+        nutritional_information
+      ${range != null ? `LIMIT ${Number(range.limit)} OFFSET ${Number(range.offset)}` : ""}`
+      trans.executeSql(SQL, [], success, error)
+    })
+  }
+
+  retrieveAllConsumptions(success = this.openCB, error = this.errorCB, range = null) {
+    this.db.transaction((trans) => {
+      // dynamicall build SQL with a range selection depending on
+      // if the range argument is passed
+      const SQL = `SELECT
+        nutritional_reference AS "nutritionalReference",
+        UUID,
+        timestamp,
+        portion_size as "portionSize",
+        location,
+        activity,
+        note
+      FROM
+        consumptions
+      ${range != null ? `LIMIT ${Number(range.limit)} OFFSET ${Number(range.offset)}` : ""}`
+      trans.executeSql(SQL, [], success, error)
+    })
+  }
+
+  retrieveConsumptionByUUID(UUID = null, success = this.openCB, error = this.errorCB) {
+    this.db.transaction((trans) => {
+      const SQL = `SELECT
+        consumptions.nutritional_reference AS "nutritionalReference",
+        consumptions.UUID,
+        consumptions.timestamp,
+        consumptions.portion_size AS "portionSize",
+        consumptions.location,
+        consumptions.activity,
+        consumptions.note,
+        nutritional_information.name,
+        (nutritional_information.kcal * consumptions.portion_size / 100) as "kcal",
+        (nutritional_information.fat * consumptions.portion_size / 100) AS "fat",
+        (nutritional_information.carbohydrates * consumptions.portion_size / 100) AS "carbohydrates",
+        (nutritional_information.sugars * consumptions.portion_size / 100) AS "sugars",
+        (nutritional_information.proteins * consumptions.portion_size / 100) AS "proteins",
+        (nutritional_information.fibre * consumptions.portion_size / 100) AS "fibre",
+        (nutritional_information.salt * consumptions.portion_size / 100) AS "salt",
+        nutritional_information.note
+      FROM
+        consumptions
+      INNER JOIN nutritional_information ON consumptions.nutritional_reference = nutritional_information.UUID
+      WHERE
+        consumptions.UUID = ?`
+      trans.executeSql(SQL, [UUID], success, error)
+    })
   }
 }

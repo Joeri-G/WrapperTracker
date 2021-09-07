@@ -81,6 +81,5 @@ export const Consumptions = {
     (SELECT UUID FROM nutritional_information WHERE UUID = "fa16a7b5-516f-44af-bd23-5b2780562009"),
     "e9153a82-a68e-4a33-8844-cf1011678209",
     300
-  );
-  `
+  );`
 }
